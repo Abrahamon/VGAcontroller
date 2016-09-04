@@ -19,9 +19,14 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module VGA_Top(
-    input B_Up,B_Down_B_Left,B_Right,B_Center,
+    input B_Up,B_Down_B_Left,B_Right,B_Center,clk,
     output vgaBlue,vgaGreen,vgaRed,Hsync,Vsync
 	 );
+
+clock_divider clk_Divider(
+    .Clock_in(clk), 
+    .Clock_out(clk25MHz)
+    );
 
 
 
