@@ -19,9 +19,10 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module VGA_Top(
-    input a,
-    output R,G,B,H_SYNC, V_SYNC
+    input B_Up,B_Down_B_Left,B_Right,B_Center,
+    output vgaBlue,vgaGreen,vgaRed,Hsync,Vsync
 	 );
+
 
 
 endmodule
