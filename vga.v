@@ -71,12 +71,14 @@ reg [2:0] rgb_reg;
 wire video_on;
 wire pos_x,pos_y;	 
 vga_sync sincronizador (
-    .clk_i(clk25MHz), 
-    .reset_i(B_Reset), 
-    .hsync_o(hsync), 
-    .vsync_o(vsync), 
-    .pixel_x_o(pos_x), 
-    .pixel_y_o(pos_y)
+    .clk(clk25MHz), 
+    .reset(B_Reset), 
+    .hsync(hsync), 
+    .vsync(vsync), 
+    .video_on(video_on), 
+    .p_tick(p_tick), 
+    .pixel_x(pos_x), 
+    .pixel_y(pos_y)
     );
 	 
 	 

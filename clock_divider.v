@@ -31,7 +31,7 @@ always @(posedge clk ) // proceso que realiza la cuenta
     if(clr) q <= 0;        //Si se activa clr el proximo valor de q sera 0
     else    q <= q + 1;    //de lo contrario el siguiente valor de q sera q+1
     
-assign o_clk25MHz  = q[24];    //50MHz/2^(23+1)=25MHz
+assign o_clk25MHz  = q[0];    //50MHz/2^(23+1)=25MHz
 assign o_clk1KHz=q[17];  
 
 endmodule
