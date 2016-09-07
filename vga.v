@@ -19,33 +19,80 @@
 //
 //////////////////////////////////////////////////////////////////////////////////
 module vga(
-input wire clk, reset,
-input wire [2:0] sw,
+input wire in_clk,
+input wire B_U_noisy, B_D_noisy, B_L_noisy, B_R_noisy,B_C_noisy, //Botones up,down,left,right
+input wire B_Reset, //resetea todo!
 output wire hsync , vsync ,
-output wire [2:0] rgb
+output wire [7:0] rgb
 );
 
-// signal declaration
+
+wire clk25MHz,clk1KHz;
+//Reloj de 25MHz
+clock_divider reloj (
+    .clk(in_clk), 
+    .clr(B_Reset), 
+    .o_clk25MHz(clk25MHz), 
+    .o_clk1KHz(clk1KHz)
+    );
+
+	 
+//Debouncers, sus entradas y cables
+wire B_U, B_D, B_L, B_R,B_C;
+debouncer d1(
+    .noisy(B_U_noisy), 
+    .clk_1KHz(clk1KHz), 
+    .debounced(B_U)
+    );
+debouncer d2(
+    .noisy(B_D_noisy), 
+    .clk_1KHz(clk1KHz), 
+    .debounced(B_D)
+    );
+debouncer d3(
+    .noisy(B_R_noisy), 
+    .clk_1KHz(clk1KHz), 
+    .debounced(B_R)
+    );
+debouncer d4(
+    .noisy(B_L_noisy), 
+    .clk_1KHz(clk1KHz), 
+    .debounced(B_L)
+    );
+debouncer d5(
+    .noisy(B_C_noisy), 
+    .clk_1KHz(clk1KHz), 
+    .debounced(B_C)
+    );
+	 
+	 
+//signal declaration
 reg [2:0] rgb_reg;
 wire video_on;
-// instantiate vga sync circuit
-vga_sync instance_name (
-    .clk(clk), 
-    .reset(reset), 
-    .hsync(hsync), 
-    .vsync(vsync), 
-    .video_on(video_on), 
-    .p_tick(), 
-    .pixel_x(), 
-    .pixel_y()
+wire pos_x,pos_y;	 
+vga_sync sincronizador (
+    .clk_i(clk25MHz), 
+    .reset_i(B_Reset), 
+    .hsync_o(hsync), 
+    .vsync_o(vsync), 
+    .pixel_x_o(pos_x), 
+    .pixel_y_o(pos_y)
     );
-// rgb b u f f e r
-always @(posedge clk , posedge reset)
-	if (reset)
-		rgb_reg <= 0;
-	else
-		rgb_reg <= sw;
-// output
-assign rgb=(video_on)?rgb_reg:3'b0;
+	 
+	 
+//Color manipulation
+color_controller instance_name (
+    .pixel_pos_x(pos_x), 
+    .pixel_pos_y(pos_y), 
+	 .B_U(B_U), 
+	 .B_D(B_D), 
+	 .B_L(B_L), 
+	 .B_R(B_R),
+	 .B_C(B_C),
+    .rgb(rgb)
+    );
+	 
+
+
 
 endmodule
