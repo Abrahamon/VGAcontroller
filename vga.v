@@ -27,13 +27,14 @@ output wire [7:0] rgb
 );
 
 
-wire clk25MHz,clk1KHz;
+wire clk25MHz,clk1KHz,clk60Hz;
 //Reloj de 25MHz
 clock_divider reloj (
     .clk(in_clk), 
     .clr(B_Reset), 
     .o_clk25MHz(clk25MHz), 
-    .o_clk1KHz(clk1KHz)
+    .o_clk1KHz(clk1KHz),
+	 .o_clk1Hz(clk1Hz)
     );
 
 	 
@@ -83,18 +84,16 @@ vga_sync sincronizador (
 	 
 	 
 //Color manipulation
-color_controller instance_name (
-    .pixel_pos_x(pos_x), 
-    .pixel_pos_y(pos_y), 
+wire mins,segs;
+fsm_timer maquina_de_estados (
 	 .B_U(B_U), 
 	 .B_D(B_D), 
 	 .B_L(B_L), 
 	 .B_R(B_R),
 	 .B_C(B_C),
-    .rgb(rgb)
+    .o_seg(segs),
+	 .o_min(mins)
     );
 	 
-
-
 
 endmodule

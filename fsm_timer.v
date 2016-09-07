@@ -18,9 +18,7 @@
 // Additional Comments: 
 //
 //////////////////////////////////////////////////////////////////////////////////
-module color_controller(
-    input wire pixel_pos_x,
-	 input wire pixel_pos_y,
+module fsm_timer(
 	 input wire B_U, B_D, B_L, B_R,B_C,
 	 output wire [7:0]rgb
     );
